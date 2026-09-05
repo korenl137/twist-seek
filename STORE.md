@@ -1,58 +1,58 @@
-# 크롬 웹스토어 게시 체크리스트
+# Chrome Web Store publishing checklist
 
-다른 컴퓨터에서도 "개발자 모드 로드" 없이 쓰려면 웹스토어에 올리는 것이 가장 편합니다. 아래 항목을 순서대로 확인하세요. (정책은 수시로 바뀌므로, 게시 직전 공식 문서를 한 번 더 확인하는 것을 권장합니다.)
+The easiest way to use this on other machines without "Load unpacked" is to publish it to the Web Store. Work through the items below in order. (Policies change often, so re-check the official docs right before you publish.)
 
-## 1. 개발자 계정 준비
+## 1. Developer account
 
-- **등록비 $5(약 7천 원), 1회만** 결제하면 됩니다. 확장마다 내는 게 아니고, 한 계정으로 **최대 20개**까지 게시 가능합니다.
-- 게시·업데이트하려면 계정에 **2단계 인증(2-Step Verification)** 이 반드시 켜져 있어야 합니다.
-- 공개용으로 쓸 **개발자 이메일**을 정하세요. (개인 메일 대신 게시 전용 메일 권장)
+- **One-time $5 registration fee.** It's per account, not per extension, and one account can publish **up to 20** items.
+- The account **must have 2-Step Verification enabled** to publish or update.
+- Pick a **developer email** for public listing. (A dedicated address is better than your personal one.)
 
-## 2. 패키징
+## 2. Packaging
 
-- 폴더 전체를 **ZIP**으로 압축해 업로드합니다. (`manifest.json`이 ZIP 최상위에 오도록)
-- ZIP 안에 **128×128 아이콘**이 포함돼 있어야 합니다. → 이미 `icons/icon128.png` 있음 ✅
-- **Manifest V3** 여야 합니다. → 현재 V3 ✅
-- 업데이트할 때마다 `manifest.json`의 **버전이 이전보다 높아야** 합니다. (CHANGELOG.md 참고)
-- 개발용 파일은 빼도 됩니다: ZIP에는 `README.md`, `CHANGELOG.md`, `STORE.md`를 넣지 않아도 무방합니다. (확장 동작에 불필요)
+- Zip the whole folder and upload the **ZIP** (`manifest.json` must be at the ZIP root).
+- The ZIP must include a **128×128 icon** → already have `icons/icon128.png` ✅
+- Must be **Manifest V3** → currently V3 ✅
+- Every update needs a **higher `version`** in `manifest.json` than the previous one (see CHANGELOG.md).
+- Dev-only files can be left out: the ZIP doesn't need `README.md`, `CHANGELOG.md`, or `STORE.md` (not required for the extension to run).
 
-## 3. 스토어 등록 이미지 (필수)
+## 3. Store listing images (required)
 
-- **확장 아이콘 128×128** — 실제 그림은 96×96 정도, 가장자리 16px는 투명 여백 권장.
-- **스크린샷 1280×800** — 최소 1장, 최대 5장. (작게는 640×400도 허용)
-- **작은 프로모 타일 440×280** — 필수 항목입니다.
-- 설명(Description)이 **비어 있으면 거부**됩니다. 아이콘·스크린샷 누락도 거부 사유입니다.
+- **Extension icon 128×128** — actual artwork ~96×96, keep the outer 16px transparent.
+- **Screenshots 1280×800** — at least 1, up to 5. (640×400 is also accepted.)
+- **Small promo tile 440×280** — required.
+- The listing is **rejected if the description is empty**. Missing icon/screenshots are also rejection reasons.
 
-> 스크린샷은 팝업 UI + 영상 위 OSD가 보이는 화면을 1280×800로 캡처하면 됩니다. 필요하면 캡처용 목업을 만들어 드릴 수 있어요.
+> For screenshots, capture the popup UI plus the on-video OSD at 1280×800.
 
-## 4. 개인정보 / 데이터 처리 (중요)
+## 4. Privacy / data handling (important)
 
-- 스토어 등록 시 **데이터 사용(Privacy) 항목**을 작성해야 하며, 여기 적은 내용이 실제 동작·개인정보처리방침과 **일치**해야 합니다. 불일치 시 삭제될 수 있습니다.
-- 이 확장은 **개인정보를 수집·전송하지 않습니다.** 설정값만 `chrome.storage.sync`에 저장합니다. → "사용자 데이터를 수집하지 않음"으로 정확히 신고하면 됩니다.
-- 그래도 **개인정보처리방침 URL**은 요구될 수 있습니다. GitHub 저장소의 마크다운 파일이나 GitHub Pages, Notion 공개 페이지 링크로 충분합니다. (오픈소스면 해당 파일 직접 링크 가능)
+- The store listing requires a **data-use (Privacy) section**, and it must **match** the actual behavior and privacy policy. A mismatch can get the item removed.
+- This extension **collects and transmits nothing.** It only stores settings in `chrome.storage.sync` → declare "Does not collect user data".
+- A **privacy policy URL** may still be required. A Markdown file in the GitHub repo, a GitHub Pages page, or a public Notion page is enough. (For open source, a direct link to the file works.)
 
-## 5. 권한 / 단일 목적 정책
+## 5. Permissions / single-purpose policy
 
-- **단일 목적(single purpose)** 원칙: 확장이 하나의 분명한 기능만 해야 합니다. → "스크롤로 영상 제어" 하나라 OK ✅
-- 요청 권한을 정당화해야 합니다. 현재 권한은 `storage`(설정 저장)뿐 → 설명하기 쉬움 ✅
-- `<all_urls>` content script는 "모든 사이트의 HTML5 영상 제어"라는 목적상 정당화됩니다. 심사에서 이유를 적게 될 수 있으니 "모든 사이트의 `<video>` 요소를 제어하기 위함"이라고 명시하세요.
+- **Single purpose**: the extension must do one clear thing → "control videos with scroll" qualifies ✅
+- You must justify requested permissions. The only permission is `storage` (saving settings) → easy to explain ✅
+- The `<all_urls>` content script is justified by the purpose ("control HTML5 video on any site"). If asked in review, state: "to control `<video>` elements on any site".
 
-## 6. 게시 & 심사
+## 6. Submit & review
 
-- 대시보드에서 ZIP 업로드 → 등록 정보(이름/설명/카테고리/언어/이미지/개인정보) 작성 → 제출.
-- 심사 시간은 **경우에 따라 수 시간~수일**까지 걸릴 수 있습니다. (권한이 많거나 정책 민감 항목이면 더 오래)
-- 게시 후 다른 컴퓨터에서는 크롬에 같은 구글 계정으로 로그인하면, 스토어에서 설치만 하면 됩니다.
+- In the dashboard: upload the ZIP → fill in listing info (name/description/category/language/images/privacy) → submit.
+- Review can take **anywhere from a few hours to a few days**. (Longer if there are many permissions or policy-sensitive items.)
+- After publishing, other machines just need to be signed into the same Google account and install from the store.
 
-## 비공개로 빠르게 쓰는 대안
+## Private / faster alternatives
 
-스토어 공개 심사가 부담되면:
+If the public review is a hassle:
 
-- 대시보드에서 **공개 범위를 "비공개(Private)"** 또는 **"테스터 한정"** 으로 설정해 본인/지정 계정만 설치하게 할 수 있습니다. (등록비 $5는 동일하게 필요)
-- 또는 지금처럼 **개발자 모드 + 폴더 로드**로 각 PC에 직접 설치 (무료, 단 PC마다 수동).
+- Set **visibility to "Private"** or **"Tester only"** in the dashboard so only you / listed accounts can install. (The $5 fee still applies.)
+- Or keep using **Developer mode + Load unpacked** on each machine (free, but manual per machine).
 
-## 참고 링크
+## Links
 
-- 개발자 계정 등록: https://developer.chrome.com/docs/webstore/register
-- 프로그램 정책: https://developer.chrome.com/docs/webstore/program-policies/policies
-- 등록 정보 작성: https://developer.chrome.com/docs/webstore/cws-dashboard-listing
-- 이미지 규격: https://developer.chrome.com/docs/webstore/images
+- Register a developer account: https://developer.chrome.com/docs/webstore/register
+- Program policies: https://developer.chrome.com/docs/webstore/program-policies/policies
+- Listing info: https://developer.chrome.com/docs/webstore/cws-dashboard-listing
+- Image specs: https://developer.chrome.com/docs/webstore/images

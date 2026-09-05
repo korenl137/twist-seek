@@ -1,36 +1,45 @@
-# 변경 이력 (Changelog)
+# Changelog
 
-이 프로젝트는 [유의적 버전(Semantic Versioning)](https://semver.org/lang/ko/)을 따릅니다.
-형식: `MAJOR.MINOR.PATCH`
+This project follows [Semantic Versioning](https://semver.org/).
+Format: `MAJOR.MINOR.PATCH`
 
-- **MAJOR** — 기존 동작과 호환되지 않는 변경 (예: 단축키 체계 전면 교체)
-- **MINOR** — 하위 호환되는 기능 추가 (예: 새 옵션, 새 언어)
-- **PATCH** — 하위 호환되는 버그 수정 / 사소한 개선
+- **MAJOR** — changes incompatible with previous behavior (e.g. reworking the whole shortcut scheme)
+- **MINOR** — backward-compatible feature additions (e.g. a new option)
+- **PATCH** — backward-compatible bug fixes / minor improvements
 
-> 버전을 올릴 때는 반드시 `manifest.json`의 `"version"` 값과 `popup.html` 푸터의 `v…` 표기를 **함께** 수정하세요. 크롬 웹스토어는 업데이트를 게시할 때마다 `manifest.json`의 버전이 이전보다 높아야 합니다.
+> The single source of truth for the version is `"version"` in `manifest.json`; the popup footer reads it at runtime via `chrome.runtime.getManifest()`. The Chrome Web Store requires a higher `manifest.json` version on every published update.
 
 ---
 
+## [1.2.0] - 2026-09-05
+
+### Changed
+
+- New defaults: **hover mode on**, **scroll-to-volume off**.
+- Flipped the base scroll direction (scroll up = rewind / volume down); *Invert scroll direction* now defaults **off** and flips back to the old direction.
+- Documentation and code comments are now in English (the popup UI keeps the Korean / English toggle).
+- Popup footer reads the version from `manifest.json` at runtime instead of a hardcoded label.
+
 ## [1.1.0] - 2026-06-16
 
-### 추가
+### Added
 
-- 다국어 지원: 한국어 / English (팝업 우하단 언어 선택, `Auto`는 브라우저 언어 따라감)
-- `_locales/` 기반 확장 이름·설명 현지화
+- Localization: Korean / English (language selector in the popup, `Auto` follows the browser)
+- `_locales/`-based extension name / description localization
 
-### 변경
+### Changed
 
-- 단축키 매핑 교체: **Shift = 긴 탐색(기본 5초)**, **Shift + Alt = 짧은 탐색(기본 1초)**
+- Reworked shortcut mapping: **Shift = long seek (default 5s)**, **Shift + Alt = short seek (default 1s)**
 
-## [1.0.x] - 개발 단계 (미게시)
+## [1.0.x] - development (unreleased)
 
-### 추가
+### Added
 
-- 영상 클릭으로 활성화 후 스크롤로 제어 (기본 동작)
-- Shift / Shift+Alt 스크롤 탐색, 그냥 스크롤로 볼륨 ±5%
-- 스크롤 방향 반전 옵션, 전체 on/off
-- 호버 모드 토글 (클릭 없이 커서 올린 영상 제어)
-- 탐색 시간 사용자 지정 입력
-- 제어 중 보라색 테두리 표시
-- 화면 피드백(OSD) — 중앙 인디케이터와 겹치지 않도록 상단 배치
-- 설정 `chrome.storage.sync` 동기화
+- Click a video to activate, then scroll to control (base behavior)
+- Shift / Shift+Alt scroll seek, plain scroll for volume ±5%
+- Invert scroll direction option, master on/off
+- Hover mode toggle (control the video under the cursor without clicking)
+- Custom seek-time inputs
+- Purple outline while controlling
+- On-screen feedback (OSD) — placed near the top so it doesn't overlap the center indicator
+- Settings synced via `chrome.storage.sync`

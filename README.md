@@ -1,85 +1,87 @@
 # Twist Seek ↻
 
-스크롤로 영상을 제어하는 크롬 확장 프로그램. 모든 사이트의 HTML5 `<video>`에서 동작합니다 (YouTube, Netflix, 강의 사이트 등).
+A Chrome extension that controls videos with the scroll wheel. Works on any HTML5 `<video>` (YouTube, Netflix, lecture sites, etc.).
 
-## 기능
+## What it does
 
-| 동작 | 결과 |
+| Action | Result |
 | --- | --- |
-| 영상 **클릭** | 해당 영상을 **활성화** (보라색 테두리가 잠깐 표시됨) |
-| **스크롤** | 볼륨 ±5% |
-| **Shift + 스크롤** | 긴 탐색 (기본 5초) |
-| **Shift + Alt + 스크롤** | 짧은 탐색 (기본 1초) |
+| **Click** a video | **Activates** it (a purple outline flashes briefly) |
+| **Scroll** | Volume ±5% |
+| **Shift + Scroll** | Long seek (default 5s) |
+| **Shift + Alt + Scroll** | Short seek (default 1s) |
 
-- 스크롤·탐색은 **활성화된 영상 위에 커서가 있을 때만** 동작하므로, 그 외 영역에서는 평소처럼 페이지 스크롤이 됩니다.
-- 변화량은 영상 위에 잠깐 표시됩니다 (`+5초`, `🔊 70%` 등).
+- Scroll / seek only act **while the cursor is over the target video**, so everywhere else the page scrolls as usual.
+- The change is shown briefly on the video (`+5s`, `🔊 70%`, etc.).
 
-### 설정 (툴바 아이콘 클릭 → 팝업)
+> 💡 Pairs really well with a **free-spinning (infinite) scroll wheel** — flick it and let it spin to scrub across a long video in one motion.
 
-- **전체 on/off** — 헤더의 큰 스위치로 기능을 완전히 끄고 켭니다.
-- **스크롤 방향 반전** — 위로 스크롤할 때의 방향을 뒤집습니다.
-- **스크롤로 볼륨 조절** — 끄면 수정자 키 없는 스크롤은 일반 페이지 스크롤로 동작합니다.
-- **화면 피드백 표시** — 영상 위 OSD 표시를 켜고 끕니다.
+### Settings (click the toolbar icon → popup)
 
-- **언어** — 팝업 우하단에서 `Auto / 한국어 / English` 선택. `Auto`는 브라우저 언어를 따릅니다.
+- **Master on/off** — the big switch in the header turns the extension fully on or off.
+- **Hover mode** — act on the video under the cursor without clicking first. (On by default.)
+- **Invert scroll direction** — flips which way scrolling moves the action.
+- **Scroll to change volume** — off by default; when off, plain scroll (no modifier) is just normal page scroll.
+- **On-screen feedback** — toggles the OSD shown over the video.
+- **Language** — `Auto / 한국어 / English`, bottom-right of the popup. `Auto` follows the browser language.
 
-모든 설정은 **크롬 계정으로 동기화**되어 로그인한 다른 기기에도 적용됩니다.
+All settings **sync through your Chrome account** to your other signed-in devices.
 
-> 웹스토어 게시 방법은 [STORE.md](STORE.md), 버전 이력은 [CHANGELOG.md](CHANGELOG.md)를 참고하세요. 현재 버전 **v1.1.0**.
+> Publishing to the Web Store: see [STORE.md](STORE.md). Version history: [CHANGELOG.md](CHANGELOG.md).
 
-## 설치 방법 (개발자 모드 / 압축 해제된 확장)
+## Install (developer mode / unpacked)
 
-1. 이 폴더(`tb-twist-seek`)를 컴퓨터의 원하는 위치에 둡니다. *(폴더를 옮기거나 삭제하면 확장도 사라지니 고정 위치에 보관하세요.)*
-2. 크롬 주소창에 `chrome://extensions` 입력 후 이동합니다.
-3. 우측 상단 **개발자 모드(Developer mode)** 를 켭니다.
-4. **압축해제된 확장 프로그램을 로드합니다 (Load unpacked)** 클릭.
-5. 이 폴더(`manifest.json`이 들어 있는 폴더)를 선택합니다.
-6. 목록에 **Twist Seek**가 나타나면 완료. 툴바 퍼즐 아이콘에서 고정(📌)해두면 편합니다.
+1. Put this folder somewhere permanent on your machine. *(Moving or deleting the folder removes the extension, so keep it in a fixed location.)*
+2. Go to `chrome://extensions`.
+3. Turn on **Developer mode** (top right).
+4. Click **Load unpacked**.
+5. Select this folder (the one containing `manifest.json`).
+6. **Twist Seek** appears in the list. Pin it (📌) from the toolbar puzzle icon for quick access.
 
-> 엣지(Edge)·웨일(Whale) 등 크로미움 기반 브라우저도 동일하게 `edge://extensions` 등에서 같은 방식으로 설치됩니다.
+> Chromium-based browsers such as Edge and Whale install the same way from `edge://extensions`, etc.
 
-### 사용 확인
+### Quick check
 
-1. YouTube 등 영상이 있는 페이지를 엽니다.
-2. 영상을 한 번 **클릭** → 보라색 테두리가 깜빡이며 활성화됩니다.
-3. 영상 위에서 **그냥 스크롤** → 볼륨이 바뀝니다.
-4. **Shift 누른 채 스크롤** → 1초씩 이동, **Shift+Alt** → 5초씩 이동.
+1. Open a page with a video (e.g. YouTube).
+2. **Click** the video once → the purple outline flashes and it activates.
+3. **Shift + scroll** over the video → jumps 5s at a time; **Shift + Alt** → 1s at a time.
+4. Turn on *Scroll to change volume* in the popup if you want plain scroll to control volume.
 
-## 문제 해결
+## Troubleshooting
 
-- **동작하지 않을 때**: 페이지를 새로고침하세요. 확장 설치 전부터 열려 있던 탭에는 적용되지 않습니다.
-- **일부 사이트(예: Netflix)** 는 자체 단축키·DRM 플레이어를 사용해 탐색이 제한될 수 있습니다. 볼륨 조절은 대체로 동작합니다.
-- **페이지 스크롤이 막힌다면**: 활성 영상 위에서 볼륨 스크롤이 동작 중이기 때문입니다. 팝업에서 *스크롤로 볼륨 조절*을 끄면 됩니다.
-- 설정 변경 후에는 즉시 적용됩니다 (새로고침 불필요).
+- **Nothing happens**: reload the page. Tabs opened before the extension was installed aren't covered.
+- **Some sites (e.g. Netflix)** use their own shortcuts / DRM players that limit seeking. Volume control usually still works.
+- **Page won't scroll**: volume scroll is active over the video. Turn off *Scroll to change volume* in the popup.
+- Setting changes apply immediately (no reload needed).
 
-## 파일 구성
+## Files
 
 ```
-tb-twist-seek/
-├── manifest.json     # 확장 설정 (MV3)
-├── content.js        # 클릭/호버 활성화 · 스크롤 탐색/볼륨 로직
-├── content.css       # OSD · 제어 테두리 스타일
-├── popup.html        # 설정 팝업
-├── popup.css         # 팝업 스타일
-├── popup.js          # 설정 저장/동기화 · 다국어
-├── _locales/         # 확장 이름/설명 현지화 (en, ko)
-├── icons/            # 16 / 48 / 128 아이콘
-├── CHANGELOG.md      # 버전 이력
-├── STORE.md          # 웹스토어 게시 체크리스트
+twist-seek/
+├── manifest.json     # extension config (MV3)
+├── content.js        # click/hover activation · scroll seek/volume logic
+├── content.css       # OSD · control outline styles
+├── popup.html        # settings popup
+├── popup.css         # popup styles
+├── popup.js          # settings save/sync · i18n
+├── _locales/         # extension name/description (en, ko)
+├── icons/            # 16 / 48 / 128 icons
+├── CHANGELOG.md      # version history
+├── STORE.md          # Web Store publishing checklist
 └── README.md
 ```
 
-## 동작 원리 (요약)
+## How it works (short version)
 
-- `content.js`가 모든 페이지(및 iframe)에 주입되어 `click`으로 활성 영상을 정하고, `wheel` 이벤트를 가로채(`passive:false`) 수정자 키 조합에 따라 `video.currentTime` / `video.volume`을 조정합니다.
-- 설정은 `chrome.storage.sync`에 저장되고 `storage.onChanged`로 실시간 반영됩니다.
+- `content.js` is injected into every page (and iframe). It picks the active video on `click` and intercepts `wheel` events (`passive:false`), adjusting `video.currentTime` / `video.volume` based on the modifier keys held.
+- Settings live in `chrome.storage.sync` and are applied live via `storage.onChanged`.
 
-## 커스터마이즈
+## Customize
 
-탐색/볼륨 간격을 바꾸려면 `content.js` 상단 `DEFAULTS`의 값을 수정하세요.
+To change the seek / volume steps, edit the `DEFAULTS` at the top of `content.js`:
 
 ```js
-seekSmall: 1,   // 짧은 탐색(Shift+Alt) 초
-seekLarge: 5,   // 긴 탐색(Shift) 초
-volumeStep: 5   // 볼륨 단계(%)
+seekSmall: 1,   // short seek (Shift+Alt), seconds
+seekLarge: 5,   // long seek (Shift), seconds
+volumeStep: 5   // volume step (%)
 ```

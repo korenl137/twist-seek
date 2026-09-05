@@ -1,8 +1,8 @@
 const DEFAULTS = {
   enabled: true,
-  hoverMode: false,
+  hoverMode: true,
   invertScroll: false,
-  volumeScroll: true,
+  volumeScroll: false,
   showOSD: true,
   seekSmall: 1,
   seekLarge: 5,
@@ -18,7 +18,7 @@ const BOOL_KEYS = [
 ];
 const NUM_KEYS = ["seekSmall", "seekLarge"];
 
-/* ---------- i18n 사전 ---------- */
+/* ---------- i18n dictionary ---------- */
 const I18N = {
   ko: {
     tagline: "스크롤 영상 컨트롤러",
@@ -85,6 +85,8 @@ const contentEl = $("content");
 const activateKey = $("activateKey");
 let statusTimer = null;
 
+$("version").textContent = "v" + chrome.runtime.getManifest().version;
+
 function applyI18n() {
   document.documentElement.lang = dict === I18N.ko ? "ko" : "en";
 
@@ -133,7 +135,7 @@ function clampNum(v, lo, hi, fallback) {
   return Math.min(hi, Math.max(lo, v));
 }
 
-/* ---------- 초기 로드 ---------- */
+/* ---------- initial load ---------- */
 chrome.storage.sync.get(DEFAULTS, (s) => {
   const v = { ...DEFAULTS, ...s };
   BOOL_KEYS.forEach((k) => ($(k).checked = v[k]));
@@ -144,7 +146,7 @@ chrome.storage.sync.get(DEFAULTS, (s) => {
   reflectMaster();
 });
 
-/* ---------- 이벤트 ---------- */
+/* ---------- events ---------- */
 BOOL_KEYS.forEach((k) => {
   $(k).addEventListener("change", (e) => {
     chrome.storage.sync.set({ [k]: e.target.checked }, flashSaved);

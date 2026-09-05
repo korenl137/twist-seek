@@ -1,25 +1,25 @@
 /* Twist Seek — content script
- * 영상을 클릭해 활성화한 뒤 스크롤로 탐색/볼륨을 조절한다.
- *  - 그냥 스크롤            → 볼륨 ±5%   (volumeScroll 옵션)
- *  - Shift + 스크롤         → 1초 탐색
- *  - Shift + Alt + 스크롤   → 5초 탐색
+ * Activate a video (click or hover), then scroll to seek / change volume.
+ *  - plain scroll          → volume ±5%   (volumeScroll option)
+ *  - Shift + scroll        → 1s seek
+ *  - Shift + Alt + scroll  → 5s seek
  */
 (() => {
   "use strict";
 
   const DEFAULTS = {
-    enabled: true,        // 전체 기능 on/off
-    hoverMode: false,     // 클릭 대신 호버로 활성화
-    invertScroll: false,  // 스크롤 방향 반전
-    volumeScroll: true,   // 그냥 스크롤로 볼륨 조절
-    showOSD: true,        // 화면 피드백 표시
-    seekSmall: 1,         // 짧은 탐색(Shift+Alt) 간격(초)
-    seekLarge: 5,         // 긴 탐색(Shift) 간격(초)
-    volumeStep: 5,        // 볼륨 단계(%)
+    enabled: true,        // master on/off
+    hoverMode: true,      // activate on hover instead of click
+    invertScroll: false,  // invert scroll direction
+    volumeScroll: false,  // plain scroll changes volume
+    showOSD: true,        // show on-screen feedback
+    seekSmall: 1,         // short seek (Shift+Alt) step, seconds
+    seekLarge: 5,         // long seek (Shift) step, seconds
+    volumeStep: 5,        // volume step (%)
     language: "auto"      // auto | ko | en
   };
 
-  // OSD 문자열 (언어별)
+  // OSD strings (per language)
   const STRINGS = {
     ko: { activated: "활성화", unit: "초" },
     en: { activated: "Activated", unit: "s" }
@@ -38,10 +38,10 @@
   let activeVideo = null;
   let osdEl = null;
   let osdTimer = null;
-  let ctrlVideo = null;   // 현재 보라색 테두리가 적용된 영상
+  let ctrlVideo = null;   // video currently showing the purple outline
   let ctrlTimer = null;
 
-  /* ---------- 설정 로드 / 동기화 ---------- */
+  /* ---------- load / sync settings ---------- */
   chrome.storage.sync.get(DEFAULTS, (stored) => {
     settings = { ...DEFAULTS, ...stored };
   });
@@ -53,7 +53,7 @@
     }
   });
 
-  /* ---------- 유틸 ---------- */
+  /* ---------- utils ---------- */
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
   function videoAtPoint(x, y) {
@@ -81,7 +81,7 @@
     }
     if (osdEl.parentElement !== host) host.appendChild(osdEl);
 
-    // 중앙은 유튜브 재생/일시정지 인디케이터와 겹치므로 상단에 표시
+    // Center overlaps YouTube's play/pause indicator, so show near the top
     const r = video.getBoundingClientRect();
     osdEl.style.left = `${r.left + r.width / 2}px`;
     osdEl.style.top = `${r.top + Math.max(28, r.height * 0.14)}px`;
@@ -94,7 +94,7 @@
     }, 650);
   }
 
-  /* ---------- 제어 중 보라색 테두리 ---------- */
+  /* ---------- purple outline while controlling ---------- */
   function markControlling(video) {
     if (ctrlVideo && ctrlVideo !== video) {
       ctrlVideo.classList.remove("twist-seek-controlling");
@@ -108,7 +108,7 @@
     }, 900);
   }
 
-  /* ---------- 활성화 (클릭) — 호버 모드에서는 비활성 ---------- */
+  /* ---------- activation (click) — disabled in hover mode ---------- */
   document.addEventListener(
     "click",
     (e) => {
@@ -123,12 +123,12 @@
     true
   );
 
-  /* 활성 영상이 DOM에서 사라지면 해제 */
+  /* release the active video once it leaves the DOM */
   const cleanup = () => {
     if (activeVideo && !document.contains(activeVideo)) activeVideo = null;
   };
 
-  /* 제어 대상 영상 결정: 호버 모드면 커서 밑 영상, 아니면 활성 영상 */
+  /* pick the target video: hover mode → video under the cursor, else the active one */
   function targetVideo(x, y) {
     if (settings.hoverMode) {
       return videoAtPoint(x, y);
@@ -138,22 +138,22 @@
     return null;
   }
 
-  /* ---------- 스크롤 처리 ---------- */
+  /* ---------- scroll handling ---------- */
   function onWheel(e) {
     if (!settings.enabled) return;
     const v = targetVideo(e.clientX, e.clientY);
-    if (!v) return; // 대상 영상이 없으면 일반 스크롤 허용
+    if (!v) return; // no target video → allow normal scroll
 
-    let dir = e.deltaY < 0 ? 1 : -1; // 스크롤 업 = +
+    let dir = e.deltaY < 0 ? -1 : 1; // scroll up = - (default); invertScroll flips it
     if (settings.invertScroll) dir *= -1;
 
     if (e.shiftKey && e.altKey) {
-      // Shift+Alt → 짧은 탐색
+      // Shift+Alt → short seek
       e.preventDefault();
       e.stopPropagation();
       seek(v, dir * settings.seekSmall);
     } else if (e.shiftKey) {
-      // Shift → 긴 탐색
+      // Shift → long seek
       e.preventDefault();
       e.stopPropagation();
       seek(v, dir * settings.seekLarge);
@@ -162,13 +162,13 @@
       e.stopPropagation();
       changeVolume(v, dir * (settings.volumeStep / 100));
     } else {
-      return; // 수정자 없고 volumeScroll=off → 일반 페이지 스크롤 유지
+      return; // no modifier and volumeScroll=off → keep normal page scroll
     }
     markControlling(v);
   }
 
   function fmtSec(n) {
-    // 소수점 불필요한 0 제거 (1.0 → 1, 1.5 → 1.5)
+    // drop trailing zeros (1.0 → 1, 1.5 → 1.5)
     return Number(n.toFixed(2)).toString();
   }
 
@@ -184,10 +184,10 @@
     showOSD(`🔊 ${Math.round(v.volume * 100)}%`, v);
   }
 
-  // passive:false 여야 preventDefault 가능
+  // passive:false is required so preventDefault works
   window.addEventListener("wheel", onWheel, { capture: true, passive: false });
 
-  // 전체화면 전환 시 OSD 위치 재배치 대비
+  // re-anchor the OSD when entering/leaving fullscreen
   document.addEventListener("fullscreenchange", () => {
     if (osdEl && osdEl.parentElement) osdEl.parentElement.removeChild(osdEl);
   });
