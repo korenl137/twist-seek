@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Twist Seek — Scroll Video Control"
+  },
+  "extDesc": {
+    "message": "Click (or hover) a video, then Shift+scroll to seek and scroll to change volume. Works on any HTML5 video."
+  },
+  "actionTitle": {
+    "message": "Twist Seek settings"
+  }
+}

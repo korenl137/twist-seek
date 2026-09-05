@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Twist Seek — 스크롤 영상 컨트롤"
+  },
+  "extDesc": {
+    "message": "영상을 클릭(또는 호버)한 뒤 Shift+스크롤로 탐색하고 스크롤로 볼륨을 조절합니다. 모든 HTML5 영상 지원."
+  },
+  "actionTitle": {
+    "message": "Twist Seek 설정"
+  }
+}
