@@ -11,6 +11,12 @@ Format: `MAJOR.MINOR.PATCH`
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Added an MIT license for the repository.
+
 ## [1.2.0] - 2026-09-05
 
 ### Changed

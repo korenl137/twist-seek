@@ -29,6 +29,8 @@ All settings **sync through your Chrome account** to your other signed-in device
 
 > Publishing to the Web Store: see [STORE.md](STORE.md). Version history: [CHANGELOG.md](CHANGELOG.md).
 
+Licensed under [MIT](LICENSE).
+
 ## Install (developer mode / unpacked)
 
 1. Put this folder somewhere permanent on your machine. *(Moving or deleting the folder removes the extension, so keep it in a fixed location.)*
